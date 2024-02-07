@@ -1,10 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const test_1 = require("@playwright/test");
+const getAsinFromSheet_1 = __importDefault(require("./getAsinFromSheet"));
 require('dotenv').config();
 const userAgentString = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36';
-const salePageElements = '';
-const nextLinkSelector = '';
 class Browser {
     constructor() {
         this.browser = null;
@@ -24,47 +26,47 @@ class Browser {
             console.error(e); // エラーが発生した場合、エラーメッセージを出力
         }
     }
-    async gotoAmazonSalePage() {
+    async gotoAmazonProductPage(asins) {
         if (!this.browser) {
-            console.error('Browser初期化でエラーになりました');
+            console.error('Browserが初期化されていません');
             return;
         }
-        this.page = await this.browser.newPage({ userAgent: userAgentString });
-        await this.page.setViewportSize({ width: 1920, height: 2080 });
-        await this.page.goto('https://www.amazon.co.jp');
-        await this.page.waitForLoadState();
-        const response = await this.page.goto('https://www.amazon.co.jp/gp/goldbox');
-        await this.page.waitForTimeout(2000 + Math.random() * 1000);
-        if (response && response.ok()) {
-            console.log('セールページに移動しました');
-            // MEMO 2ページ分の処理をループで行う
-            for (let i = 0; i < 1; i++) {
-                // 現在のページでスクロール
-                await this.scrollPage();
-                await this.page.waitForSelector(salePageElements, { state: 'visible' });
-                await this.page.waitForTimeout(3000 + Math.random() * 1000);
-                // 現在のページからhrefを取得
-                await this.extract();
-                console.log(`${i + 1}ページ目保存したhref`, Object.keys(this.salePageHrefs).length);
+        console.log('ブラウザ起動');
+        this.page = await this.browser.newPage({
+        // userAgentの設定を一時的にコメントアウトして、デフォルトのUser Agentを使用する
+        // userAgent: userAgentString
+        });
+        for (const asin of asins) {
+            const url = `https://www.amazon.co.jp/dp/${asin}`;
+            console.log(`${url} : アクセススタート`);
+            await this.page.goto(url, { waitUntil: 'domcontentloaded' }); // waitUntilオプションを'domcontentloaded'に変更
+            console.log(`[INFO] ${asin}のページにアクセスしました`);
+            // 商品名を取得するためのセレクタを更新し、代替のセレクタも考慮
+            const productNameElement = this.page.locator('#productTitle, h1#title, .product-title-word-break');
+            const productName = await productNameElement.textContent();
+            if (productName) {
+                console.log(`商品名: ${productName.trim()}`);
+            }
+            else {
+                console.log(`[INFO] ${asin}のページにアクセスしましたが、商品名を取得できませんでした`);
             }
         }
-        else {
-            console.error('セールページに移動できませんでした');
-        }
+        // 必要な情報の取得が完了したらブラウザを閉じる
+        await this.browser.close();
     }
-    async extract() {
-        if (this.page) {
-            const elements = await this.page.$$(salePageElements);
-            let count = Object.keys(this.salePageHrefs).length; // 既存のURL数からカウント開始
-            for (let element of elements) {
-                const href = await element.getAttribute('href');
-                if (href) {
-                    this.salePageHrefs[count] = href;
-                    count++;
-                }
-            }
-        }
-    }
+    // async extract(): Promise<void> {
+    // 	if (this.page) {
+    // 		const elements = await this.page.$$(salePageElements)
+    // 		let count = Object.keys(this.salePageHrefs).length // 既存のURL数からカウント開始
+    // 		for (let element of elements) {
+    // 			const href = await element.getAttribute('href')
+    // 			if (href) {
+    // 				this.salePageHrefs[count] = href
+    // 				count++
+    // 			}
+    // 		}
+    // 	}
+    // }
     async scrollPage() {
         if (this.page) {
             await this.page.evaluate(() => {
@@ -73,4 +75,17 @@ class Browser {
         }
     }
 }
+// MEMO ASINをブラウザーに入力してデータ取得する
+// ASINのデータを取得してAmazonの商品ページにアクセスする例
+;
+(async () => {
+    const browser = new Browser();
+    await browser.launchBrowser();
+    const asinToUrlMap = await (0, getAsinFromSheet_1.default)(); // getAsinFromSheetの結果を取得
+    if (asinToUrlMap) {
+        const allAsins = Object.values(asinToUrlMap).flat(); // 全てのASINをフラットな配列にする
+        await browser.gotoAmazonProductPage(allAsins); // ASINに基づいてAmazonの商品ページにアクセス
+    }
+    // ブラウザの終了処理など
+})();
 //# sourceMappingURL=gotoAmazon.js.map

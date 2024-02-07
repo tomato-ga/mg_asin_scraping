@@ -56,5 +56,5 @@ async function getAsin() {
         return; // ここでも undefined を返す
     }
 }
-getAsin();
+exports.default = getAsin;
 //# sourceMappingURL=getAsinFromSheet.js.map

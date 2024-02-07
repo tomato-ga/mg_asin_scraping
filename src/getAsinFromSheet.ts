@@ -14,7 +14,7 @@ const client = new JWT({
 // Authorize and create a Google Sheets API instance
 const sheets = google.sheets({ version: 'v4', auth: client })
 
-interface AsinToUrlMap {
+export interface AsinToUrlMap {
 	[url: string]: string[]
 }
 
@@ -70,4 +70,4 @@ async function getAsin(): Promise<AsinToUrlMap | undefined> {
 	}
 }
 
-getAsin()
+export default getAsin
