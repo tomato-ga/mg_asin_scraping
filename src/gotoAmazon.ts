@@ -49,8 +49,15 @@ class Browser {
 			// 商品名を取得するためのセレクタを更新し、代替のセレクタも考慮
 			const productNameElement = this.page.locator('h1#title')
 			const productName = await productNameElement.textContent()
+
+			const productDescriptionText = await this.page.evaluate(() => {
+				const descripElement = document.querySelector('div#productDescription')
+				return descripElement ? descripElement.textContent?.trim() : ''
+			})
+
 			if (productName) {
-				console.log(`商品名: ${productName.trim()}`)
+				// console.log(`商品名: ${productName.trim()}`)
+				console.log(`商品説明: ${productDescriptionText}`)
 			} else {
 				console.log(`[INFO] ${asin}のページにアクセスしましたが、商品名を取得できませんでした`)
 			}
