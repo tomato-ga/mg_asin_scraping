@@ -1,3 +1,0 @@
-interface tt {
-	moji: string
-}
