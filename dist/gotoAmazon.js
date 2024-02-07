@@ -33,16 +33,18 @@ class Browser {
         }
         console.log('ブラウザ起動');
         this.page = await this.browser.newPage({
-        // userAgentの設定を一時的にコメントアウトして、デフォルトのUser Agentを使用する
-        // userAgent: userAgentString
+            // userAgentの設定を一時的にコメントアウトして、デフォルトのUser Agentを使用する
+            userAgent: userAgentString
         });
+        await this.page.setViewportSize({ width: 1920, height: 2080 });
         for (const asin of asins) {
             const url = `https://www.amazon.co.jp/dp/${asin}`;
             console.log(`${url} : アクセススタート`);
             await this.page.goto(url, { waitUntil: 'domcontentloaded' }); // waitUntilオプションを'domcontentloaded'に変更
+            await this.page.waitForLoadState();
             console.log(`[INFO] ${asin}のページにアクセスしました`);
             // 商品名を取得するためのセレクタを更新し、代替のセレクタも考慮
-            const productNameElement = this.page.locator('#productTitle, h1#title, .product-title-word-break');
+            const productNameElement = this.page.locator('h1#title');
             const productName = await productNameElement.textContent();
             if (productName) {
                 console.log(`商品名: ${productName.trim()}`);
