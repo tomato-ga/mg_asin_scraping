@@ -7,6 +7,8 @@ const userAgentString: string =
 const salePageElements: string = ''
 const nextLinkSelector = ''
 
+
+
 class Browser {
 	browser: ChromiumBrowser | null = null
 	page: Page | null = null
