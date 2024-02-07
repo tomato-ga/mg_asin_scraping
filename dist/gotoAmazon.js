@@ -51,12 +51,11 @@ class Browser {
                 const descripElement = document.querySelector('div#productDescription');
                 return descripElement ? (_a = descripElement.textContent) === null || _a === void 0 ? void 0 : _a.trim() : '';
             });
-            if (productName) {
-                // console.log(`商品名: ${productName.trim()}`)
+            if (productName && productDescriptionText) {
                 console.log(`商品説明: ${productDescriptionText}`);
             }
             else {
-                console.log(`[INFO] ${asin}のページにアクセスしましたが、商品名を取得できませんでした`);
+                console.log(`[INFO] ${asin}のページにアクセスしましたが、商品説明を取得できませんでした`);
             }
         }
         // 必要な情報の取得が完了したらブラウザを閉じる

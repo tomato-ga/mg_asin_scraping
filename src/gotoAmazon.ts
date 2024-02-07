@@ -55,11 +55,10 @@ class Browser {
 				return descripElement ? descripElement.textContent?.trim() : ''
 			})
 
-			if (productName) {
-				// console.log(`商品名: ${productName.trim()}`)
+			if (productName && productDescriptionText) {
 				console.log(`商品説明: ${productDescriptionText}`)
 			} else {
-				console.log(`[INFO] ${asin}のページにアクセスしましたが、商品名を取得できませんでした`)
+				console.log(`[INFO] ${asin}のページにアクセスしましたが、商品説明を取得できませんでした`)
 			}
 		}
 

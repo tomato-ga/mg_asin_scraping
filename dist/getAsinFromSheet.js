@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const googleapis_1 = require("googleapis");
-const google_auth_library_1 = require("google-auth-library");
 // Load the credentials from the service account key file
 const credentials = require('/Users/donbe/Codes/mg_asin_scraping/aicontent.json');
 // Create a new JWT client using the credentials
-const client = new google_auth_library_1.JWT({
-    email: credentials.client_email,
-    key: credentials.private_key,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets']
+// Initialize GoogleAuth client
+const auth = new googleapis_1.google.auth.GoogleAuth({
+    keyFile: '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'] // 必要なスコープ
 });
-// Authorize and create a Google Sheets API instance
-const sheets = googleapis_1.google.sheets({ version: 'v4', auth: client });
+// Create a new Google Sheets API instance
+const sheets = googleapis_1.google.sheets({ version: 'v4', auth });
 async function getAsin() {
     try {
         // Your spreadsheet ID

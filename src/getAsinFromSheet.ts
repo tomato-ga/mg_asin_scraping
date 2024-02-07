@@ -5,14 +5,14 @@ import { JWT } from 'google-auth-library'
 const credentials = require('/Users/donbe/Codes/mg_asin_scraping/aicontent.json')
 
 // Create a new JWT client using the credentials
-const client = new JWT({
-	email: credentials.client_email,
-	key: credentials.private_key,
-	scopes: ['https://www.googleapis.com/auth/spreadsheets']
+// Initialize GoogleAuth client
+const auth = new google.auth.GoogleAuth({
+	keyFile: '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
+	scopes: ['https://www.googleapis.com/auth/spreadsheets'] // 必要なスコープ
 })
 
-// Authorize and create a Google Sheets API instance
-const sheets = google.sheets({ version: 'v4', auth: client })
+// Create a new Google Sheets API instance
+const sheets = google.sheets({ version: 'v4', auth })
 
 export interface AsinToUrlMap {
 	[url: string]: string[]
