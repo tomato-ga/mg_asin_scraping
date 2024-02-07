@@ -1,8 +1,4 @@
 import { google } from 'googleapis'
-import { JWT } from 'google-auth-library'
-
-// Load the credentials from the service account key file
-const credentials = require('/Users/donbe/Codes/mg_asin_scraping/aicontent.json')
 
 // Create a new JWT client using the credentials
 // Initialize GoogleAuth client

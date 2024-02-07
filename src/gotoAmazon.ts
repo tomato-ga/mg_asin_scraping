@@ -1,5 +1,7 @@
 import { chromium, ChromiumBrowser, Page } from '@playwright/test'
 import getAsin from './getAsinFromSheet'
+import { LLMgeminiRun } from './llmGen'
+import writeSheet from './writeAsinToSheet'
 
 require('dotenv').config()
 
@@ -57,6 +59,12 @@ class Browser {
 
 			if (productName && productDescriptionText) {
 				console.log(`商品説明: ${productDescriptionText}`)
+				const result = await LLMgeminiRun(productDescriptionText)
+				console.log('llmresult', result)
+
+				if (result) {
+					await writeSheet(result)
+				}
 			} else {
 				console.log(`[INFO] ${asin}のページにアクセスしましたが、商品説明を取得できませんでした`)
 			}

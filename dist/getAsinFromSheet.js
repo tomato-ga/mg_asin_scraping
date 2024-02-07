@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const googleapis_1 = require("googleapis");
-// Load the credentials from the service account key file
-const credentials = require('/Users/donbe/Codes/mg_asin_scraping/aicontent.json');
 // Create a new JWT client using the credentials
 // Initialize GoogleAuth client
 const auth = new googleapis_1.google.auth.GoogleAuth({
