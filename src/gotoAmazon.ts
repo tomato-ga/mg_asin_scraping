@@ -27,6 +27,9 @@ class Browser {
 		}
 	}
 
+	// TODO シートからasin読み込んで、
+	// TODO classのgotoAmazonProductPageにasinを渡すだけで商品説明を読み込んでAI生成できるようにする
+
 	async gotoAmazonProductPage(asins: string[]): Promise<void> {
 		if (!this.browser) {
 			console.error('Browserが初期化されていません')
@@ -73,20 +76,6 @@ class Browser {
 		// 必要な情報の取得が完了したらブラウザを閉じる
 		await this.browser.close()
 	}
-
-	// async extract(): Promise<void> {
-	// 	if (this.page) {
-	// 		const elements = await this.page.$$(salePageElements)
-	// 		let count = Object.keys(this.salePageHrefs).length // 既存のURL数からカウント開始
-	// 		for (let element of elements) {
-	// 			const href = await element.getAttribute('href')
-	// 			if (href) {
-	// 				this.salePageHrefs[count] = href
-	// 				count++
-	// 			}
-	// 		}
-	// 	}
-	// }
 
 	async scrollPage(): Promise<void> {
 		if (this.page) {
