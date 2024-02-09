@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const test_1 = require("@playwright/test");
 const getAsinFromSheet_1 = __importDefault(require("./getAsinFromSheet"));
 const llmGen_1 = require("./llmGen");
-const writeAsinToSheet_1 = __importDefault(require("./writeAsinToSheet"));
 require('dotenv').config();
 const userAgentString = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36';
 class Browser {
@@ -60,7 +59,7 @@ class Browser {
                 const result = await (0, llmGen_1.LLMgeminiRun)(productDescriptionText);
                 console.log('llmresult', result);
                 if (result) {
-                    await (0, writeAsinToSheet_1.default)(result);
+                    // await writeSheet(result)
                 }
             }
             else {

@@ -66,7 +66,7 @@ class Browser {
 				console.log('llmresult', result)
 
 				if (result) {
-					await writeSheet(result)
+					// await writeSheet(result)
 				}
 			} else {
 				console.log(`[INFO] ${asin}のページにアクセスしましたが、商品説明を取得できませんでした`)
