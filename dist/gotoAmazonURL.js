@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const test_1 = require("@playwright/test");
-const getAsinFromSheetEditor_1 = __importDefault(require("./getAsinFromSheetEditor"));
+const getAsinFromSheetEditor_1 = __importDefault(require("./getAsinFromSheetEditor")); // Ensure URLRow is exported
 const llmGen_1 = require("./llmGen");
 const writeAsinToSheet_1 = __importDefault(require("./writeAsinToSheet"));
 const googleapis_1 = require("googleapis");
@@ -26,7 +26,8 @@ class Browser {
             headless: true
         });
     }
-    async gotoAmazonProductPage(urls) {
+    async gotoAmazonProductPage(urlRows) {
+        // Accept an array of URLRow objects
         if (!this.browser) {
             console.error('Browserが初期化されていません');
             return;
@@ -35,8 +36,9 @@ class Browser {
             userAgent: userAgentString
         });
         await this.page.setViewportSize({ width: 1920, height: 1080 });
-        for (let index = 0; index < urls.length; index++) {
-            const url = urls[index];
+        for (const urlRow of urlRows) {
+            // Iterate through URLRow objects
+            const url = urlRow.url; // Extract URL from the URLRow object
             console.log(`${url} : アクセススタート`);
             await this.page.goto(url, { waitUntil: 'domcontentloaded' });
             const productNameElement = this.page.locator('h1#title');
@@ -49,7 +51,7 @@ class Browser {
             if (productName && productFeaturebullet) {
                 const result = await (0, llmGen_1.LLMgeminiRun)(productFeaturebullet);
                 if (result) {
-                    await (0, writeAsinToSheet_1.default)(result, index + 3); // +3 because the URLs start from C3
+                    await (0, writeAsinToSheet_1.default)(result, urlRow.rowIndex); // Use rowIndex from URLRow
                 }
             }
             else {
@@ -64,9 +66,9 @@ class Browser {
 (async () => {
     const browser = new Browser();
     await browser.launchBrowser();
-    const urls = await (0, getAsinFromSheetEditor_1.default)();
-    if (urls) {
-        await browser.gotoAmazonProductPage(urls);
+    const urlRows = await (0, getAsinFromSheetEditor_1.default)(); // This now expects URLRow objects
+    if (urlRows) {
+        await browser.gotoAmazonProductPage(urlRows); // Pass URLRow objects
     }
 })();
 //# sourceMappingURL=gotoAmazonURL.js.map

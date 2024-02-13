@@ -1,5 +1,5 @@
 import { chromium, ChromiumBrowser, Page } from '@playwright/test'
-import getAsinEditor from './getAsinFromSheetEditor'
+import getAsinEditor, { URLRow } from './getAsinFromSheetEditor' // Ensure URLRow is exported
 import { LLMgeminiRun } from './llmGen'
 import writeSheet from './writeAsinToSheet'
 import { google } from 'googleapis'
@@ -25,7 +25,8 @@ class Browser {
 		})
 	}
 
-	async gotoAmazonProductPage(urls: string[]): Promise<void> {
+	async gotoAmazonProductPage(urlRows: URLRow[]): Promise<void> {
+		// Accept an array of URLRow objects
 		if (!this.browser) {
 			console.error('Browserが初期化されていません')
 			return
@@ -35,8 +36,9 @@ class Browser {
 		})
 		await this.page.setViewportSize({ width: 1920, height: 1080 })
 
-		for (let index = 0; index < urls.length; index++) {
-			const url = urls[index]
+		for (const urlRow of urlRows) {
+			// Iterate through URLRow objects
+			const url = urlRow.url // Extract URL from the URLRow object
 			console.log(`${url} : アクセススタート`)
 			await this.page.goto(url, { waitUntil: 'domcontentloaded' })
 			const productNameElement = this.page.locator('h1#title')
@@ -49,7 +51,7 @@ class Browser {
 			if (productName && productFeaturebullet) {
 				const result = await LLMgeminiRun(productFeaturebullet)
 				if (result) {
-					await writeSheet(result, index + 3) // +3 because the URLs start from C3
+					await writeSheet(result, urlRow.rowIndex) // Use rowIndex from URLRow
 				}
 			} else {
 				console.log(`[INFO] ${url}のページにアクセスしましたが、商品説明を取得できませんでした`)
@@ -64,8 +66,8 @@ class Browser {
 ;(async () => {
 	const browser = new Browser()
 	await browser.launchBrowser()
-	const urls = await getAsinEditor()
-	if (urls) {
-		await browser.gotoAmazonProductPage(urls)
+	const urlRows = await getAsinEditor() // This now expects URLRow objects
+	if (urlRows) {
+		await browser.gotoAmazonProductPage(urlRows) // Pass URLRow objects
 	}
 })()

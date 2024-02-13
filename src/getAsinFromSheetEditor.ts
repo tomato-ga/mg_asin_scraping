@@ -9,11 +9,16 @@ const auth = new google.auth.GoogleAuth({
 // Create a new Google Sheets API instance
 const sheets = google.sheets({ version: 'v4', auth })
 
-async function getAsinEditor(): Promise<string[] | undefined> {
+export interface URLRow {
+	url: string
+	rowIndex: number
+}
+
+async function getAsinEditor(): Promise<URLRow[] | undefined> {
 	try {
 		const spreadsheetId = '1nx467L8lBrlAXeOOQX5jFJxxoiAAjhyT0MHLKVak0h8'
-		// ステータス列(F列)も含めた範囲を指定
-		const range = '手動URL!C3:F'
+		// Include the row index in the data fetched
+		const range = '手動URL!B3:F'
 
 		const response = await sheets.spreadsheets.values.get({
 			spreadsheetId,
@@ -26,20 +31,20 @@ async function getAsinEditor(): Promise<string[] | undefined> {
 			return
 		}
 
-		const urlArray: string[] = []
+		const urlRows: URLRow[] = []
 
-		values.forEach((row) => {
-			const url = row[0] // URLを取得
-			const status = row[3] // F列のステータスを取得
+		values.forEach((row, index) => {
+			const url = row[1] // Adjusted for zero-based index, URL is now in second column (C)
+			const status = row[4] // Status is in the fifth column (F), zero-based index
 
-			// URLが有効で、かつステータスが「済」でない場合に配列に追加
+			// URL is valid and status is not "済", include the original sheet row number (index + offset from header rows)
 			if (typeof url === 'string' && url.startsWith('https://') && status !== '済') {
-				urlArray.push(url)
+				urlRows.push({ url, rowIndex: index + 3 }) // Adjust the offset if your range start changes
 			}
 		})
 
-		console.log(urlArray)
-		return urlArray // 条件を満たすURLの配列を返す
+		console.log(urlRows)
+		return urlRows // Returns an array of URLRow, each containing a URL and its row index
 	} catch (error) {
 		console.error('Error:', error)
 		return

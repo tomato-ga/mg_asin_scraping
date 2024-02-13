@@ -16,6 +16,8 @@ interface Result {
 }
 
 async function writeSheet(result: Result, rowIndex: number): Promise<void> {
+	console.log('rowIndex: ', rowIndex)
+
 	const spreadsheetId = '1nx467L8lBrlAXeOOQX5jFJxxoiAAjhyT0MHLKVak0h8'
 	// データを書き込む範囲
 	const dataRange = `手動URL!D${rowIndex}:E${rowIndex}`

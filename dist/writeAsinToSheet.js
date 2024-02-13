@@ -10,6 +10,7 @@ const auth = new googleapis_1.google.auth.GoogleAuth({
 // Create a new Google Sheets API instance
 const sheets = googleapis_1.google.sheets({ version: 'v4', auth });
 async function writeSheet(result, rowIndex) {
+    console.log('rowIndex: ', rowIndex);
     const spreadsheetId = '1nx467L8lBrlAXeOOQX5jFJxxoiAAjhyT0MHLKVak0h8';
     // データを書き込む範囲
     const dataRange = `手動URL!D${rowIndex}:E${rowIndex}`;
