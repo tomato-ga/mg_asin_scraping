@@ -4,7 +4,7 @@ const googleapis_1 = require("googleapis");
 // Create a new JWT client using the credentials
 // Initialize GoogleAuth client
 const auth = new googleapis_1.google.auth.GoogleAuth({
-    keyFile: '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
+    keyFile: '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', //'/Users/donbe/Codes/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
     scopes: ['https://www.googleapis.com/auth/spreadsheets'] // 必要なスコープ
 });
 // Create a new Google Sheets API instance

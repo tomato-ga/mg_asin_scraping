@@ -14,6 +14,7 @@ const auth = new googleapis_1.google.auth.GoogleAuth({
     scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
 const sheets = googleapis_1.google.sheets({ version: 'v4', auth });
+const userAgentString = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36';
 class Browser {
     constructor() {
         this.browser = null;
@@ -31,7 +32,7 @@ class Browser {
             return;
         }
         this.page = await this.browser.newPage({
-            userAgent: 'your-user-agent-string-here'
+            userAgent: userAgentString
         });
         await this.page.setViewportSize({ width: 1920, height: 1080 });
         for (let index = 0; index < urls.length; index++) {

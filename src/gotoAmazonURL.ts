@@ -11,6 +11,9 @@ const auth = new google.auth.GoogleAuth({
 })
 const sheets = google.sheets({ version: 'v4', auth })
 
+const userAgentString: string =
+	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+
 class Browser {
 	browser: ChromiumBrowser | null = null
 	page: Page | null = null
@@ -28,7 +31,7 @@ class Browser {
 			return
 		}
 		this.page = await this.browser.newPage({
-			userAgent: 'your-user-agent-string-here'
+			userAgent: userAgentString
 		})
 		await this.page.setViewportSize({ width: 1920, height: 1080 })
 
