@@ -2,9 +2,11 @@ import { google } from 'googleapis'
 
 // Initialize GoogleAuth client
 const auth = new google.auth.GoogleAuth({
-	keyFile: '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', //'/Users/ore/Documents/GitHub/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
+	keyFile: '/Users/ore/Documents/GitHub/mg_asin_scraping/aicontent.json',
 	scopes: ['https://www.googleapis.com/auth/spreadsheets'] // 必要なスコープ
 })
+
+// '/Users/donbe/Codes/mg_asin_scraping/aicontent.json', //'/Users/ore/Documents/GitHub/mg_asin_scraping/aicontent.json', // サービスアカウントキーファイルのパス
 
 // Create a new Google Sheets API instance
 const sheets = google.sheets({ version: 'v4', auth })
