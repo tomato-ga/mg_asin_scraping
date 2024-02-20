@@ -1,0 +1,27 @@
+{
+  "name": "mg_asin_scraping",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.41.2",
+    "@types/google-spreadsheet": "^4.0.0",
+    "@types/node": "^20.11.16",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.2.0",
+    "@langchain/google-genai": "^0.0.10",
+    "dotenv": "^16.4.1",
+    "google-spreadsheet": "^4.1.1",
+    "googleapis": "^132.0.0",
+    "langchain": "^0.1.14",
+    "ts-node": "^10.9.2"
+  }
+}
